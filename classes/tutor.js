@@ -8,7 +8,8 @@ function Tutor (name, possibleTimeslots) {
 
   this.assignedTimeslots = [];
 
-  this.percentageOfTimeslotSuggestions = null;
+  this.probabilityOfGettingChosen = null;
+  this.compensationFactor = null;
   this.idealNumberOfTimeslots = null;
   this.numberOfTimeslotsAssigned = 0;
 }
@@ -35,8 +36,8 @@ Tutor.prototype = {
       if (this.assignedTimeslots.length === 0) {
         string += "[ name: \"" + this.name + "\" no-timeslots ]";
       } else {
-        string += "[ name: \"" + this.name + "\" percentageOfSuggestions: " +
-          Math.floor(this.percentageOfTimeslotSuggestions * 100) +
+        string +=
+          "probabilityOfGettingChosen: " + this.probabilityOfGettingChosen +
           " idealNumberOfTimeslots: " + this.idealNumberOfTimeslots +
           " actualNumberOfTimeslots: " + this.numberOfTimeslotsAssigned + "\n";
         for (var i=0; i<this.assignedTimeslots.length; i++) {

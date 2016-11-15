@@ -80,31 +80,58 @@ var participants = [
   new Participant("Gruppe 26")
 ];
 
+function shuffle(a) {
+  var j, x, i;
+  for (i = a.length; i; i--) {
+    j = Math.floor(Math.random() * i);
+    x = a[i - 1];
+    a[i - 1] = a[j];
+    a[j] = x;
+  }
+}
+
 function assignTutorFromCandidates (timeslot) {
-  if (!timeslot.hasTutor() && timeslot.tutorCandidates.length !== 0) {
+  if (!timeslot.hasTutor() && timeslot.tutorCandidates.length > 0) {
+
+    var tutorCandidates = timeslot.tutorCandidates;
+
     var candidatesWithCapacity = [];
-    var rarestAppointedCandidate = timeslot.tutorCandidates[0];
-    for (var i=0; i<timeslot.tutorCandidates.length; i++) {
-      var curCandidate = timeslot.tutorCandidates[i];
+    var rarestAppointedCandidate = tutorCandidates[0];
+    for (var i=0; i<tutorCandidates.length; i++) {
+      var curCandidate = tutorCandidates[i];
       if (curCandidate.lessThanIdealNumberOfTimeslotsAssigned()) {
-        candidatesWithCapacity[candidatesWithCapacity.length] = curCandidate;
+        candidatesWithCapacity.push(curCandidate);
       }
       if (curCandidate.numberOfTimeslotsAssigned < rarestAppointedCandidate.numberOfTimeslotsAssigned) {
         rarestAppointedCandidate = curCandidate;
       }
     }
+
     var chosenTutor = null;
+
     if (candidatesWithCapacity.length === 0) {
       chosenTutor = rarestAppointedCandidate;
     } else {
-      var randomIndex = Math.floor((Math.random() * candidatesWithCapacity.length));
-      chosenTutor = candidatesWithCapacity[randomIndex];
+      // Create a set in which every candidate occurs as many times as needed to compensate
+      // the difference in probability to the highest probable candidate
+      var compensatedSetOfCandidates = [];
+      for (i=0; i<candidatesWithCapacity.length; i++) {
+        for (var j=0; j<candidatesWithCapacity[i].compensationFactor; j++) {
+          compensatedSetOfCandidates.push(candidatesWithCapacity[i]);
+        }
+      }
+      shuffle(compensatedSetOfCandidates);
+
+      // Choose randomly from the compensated set
+      var randomIndex = Math.floor((Math.random() * compensatedSetOfCandidates.length));
+      chosenTutor = compensatedSetOfCandidates[randomIndex];
     }
     timeslot.assignTutor(chosenTutor);
     chosenTutor.assignTimeslot(timeslot);
   }
 }
 
+// Gather tutor candidates for each timeslot
 for (var i=0; i<tutors.length; i++) {
   var curTutor = tutors[i];
   for (var j=0; j<curTutor.possibleTimeslots.length; j++) {
@@ -113,20 +140,59 @@ for (var i=0; i<tutors.length; i++) {
   }
 }
 
-var numberOfTutorTimeslotSuggestions = 0;
-for (var k=0; k<tutors.length; k++) {
-  numberOfTutorTimeslotSuggestions += tutors[k].possibleTimeslots.length;
+// calculate average probability of getting chosen for each candidate
+var candidateProbabilities = {};
+var averageProbabilites = {};
+for (i=0; i<tutors.length; i++) {
+  candidateProbabilities[tutors[i].name] = [];
 }
-for (var l=0; l<tutors.length; l++) {
-  curTutor = tutors[l];
-  var percent = curTutor.possibleTimeslots.length / numberOfTutorTimeslotSuggestions;
-  curTutor.percentageOfTimeslotSuggestions = percent;
-  //curTutor.idealNumberOfTimeslots = Math.ceil(timeslots.length * percent);
-  curTutor.idealNumberOfTimeslots = Math.floor(timeslots.length / tutors.length);
+for (i=0; i<timeslots.length; i++) {
+  var curTimeslot = timeslots[i];
+  var probability = 1 / curTimeslot.tutorCandidates.length;
+  for (j=0; j<curTimeslot.tutorCandidates.length; j++) {
+    var curCandidate = curTimeslot.tutorCandidates[j];
+    candidateProbabilities[curCandidate.name].push(probability);
+  }
+}
+for (var name in candidateProbabilities) {
+  if (candidateProbabilities.hasOwnProperty(name)) {
+    var probabilitiesSum = 0;
+    for (i=0; i<candidateProbabilities[name].length; i++) {
+      probabilitiesSum += candidateProbabilities[name][i];
+    }
+    var average = probabilitiesSum / candidateProbabilities[name].length;
+    averageProbabilites[name] = average;
+  }
+}
+var averageSum = 0;
+for (i=0; i<tutors.length; i++) {
+  var curAverage = averageProbabilites[tutors[i].name];
+  tutors[i].probabilityOfGettingChosen = curAverage;
+  averageSum += curAverage;
+  tutors[i].idealNumberOfTimeslots = Math.floor(timeslots.length / tutors.length);
 }
 
-for (var m=0; m<timeslots.length; m++) {
-  var curTimeslot = timeslots[m];
+// Mirror probabilities along average of averages: Least probable will be
+// most probable and vice versa
+var averageOfAverages = averageSum / tutors.length;
+var invertedProbabilities = {};
+for (name in averageProbabilites) {
+  if (averageProbabilites.hasOwnProperty(name)) {
+    var diff = averageOfAverages - averageProbabilites[name];
+    invertedProbabilities[name] = averageOfAverages + diff;
+  }
+}
+
+// For each tutor calculate the factor that will raise (or lower) its probability of being chosen
+// to match the inverted probability calculated above
+for (i=0; i<tutors.length; i++) {
+  tutors[i].compensationFactor =
+    Math.round((invertedProbabilities[tutors[i].name] / tutors[i].probabilityOfGettingChosen) * 10);
+}
+
+// Assign all slots with only one candidate first
+for (i=0; i<timeslots.length; i++) {
+  curTimeslot = timeslots[i];
   if (curTimeslot.tutorCandidates.length === 1) {
     var chosenTutor = curTimeslot.tutorCandidates[0];
     curTimeslot.assignTutor(chosenTutor);
@@ -134,14 +200,16 @@ for (var m=0; m<timeslots.length; m++) {
   }
 }
 
-for (var n=timeslots.length-1; n>=0; n--) {
-  assignTutorFromCandidates(timeslots[n]);
+// Assign all remaining slots
+for (i=0; i<timeslots.length; i++) {
+  assignTutorFromCandidates(timeslots[i]);
 }
 
-for (var o=0; o<timeslots.length; o++) {
-  console.log(timeslots[o].toString());
+// Debugging
+for (i=0; i<timeslots.length; i++) {
+  console.log(timeslots[i].toString());
 }
 
-for (var p=0; p<tutors.length; p++) {
-  console.log(tutors[p].toString());
+for (i=0; i<tutors.length; i++) {
+  console.log(tutors[i].toString());
 }
