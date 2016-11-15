@@ -80,19 +80,30 @@ var participants = [
   new Participant("Gruppe 26")
 ];
 
-function assignRandomTutorFromCandidates (timeslot) {
-  if (timeslot.hasTutor()) {
-    throw "Cannot assign tutor to " + timeslot.toString(true) + ". " + timeslot.associatedTutor.toString(true) + " already assigned.";
-  }
-  if (timeslot.tutorCandidates.length !== 0) {
-    var randomIndex = Math.floor((Math.random() * timeslot.tutorCandidates.length));
-    var chosenTutor = timeslot.tutorCandidates[randomIndex];
+function assignTutorFromCandidates (timeslot) {
+  if (!timeslot.hasTutor() && timeslot.tutorCandidates.length !== 0) {
+    var candidatesWithCapacity = [];
+    var rarestAppointedCandidate = timeslot.tutorCandidates[0];
+    for (var i=0; i<timeslot.tutorCandidates.length; i++) {
+      var curCandidate = timeslot.tutorCandidates[i];
+      if (curCandidate.lessThanIdealNumberOfTimeslotsAssigned()) {
+        candidatesWithCapacity[candidatesWithCapacity.length] = curCandidate;
+      }
+      if (curCandidate.numberOfTimeslotsAssigned < rarestAppointedCandidate.numberOfTimeslotsAssigned) {
+        rarestAppointedCandidate = curCandidate;
+      }
+    }
+    var chosenTutor = null;
+    if (candidatesWithCapacity.length === 0) {
+      chosenTutor = rarestAppointedCandidate;
+    } else {
+      var randomIndex = Math.floor((Math.random() * candidatesWithCapacity.length));
+      chosenTutor = candidatesWithCapacity[randomIndex];
+    }
     timeslot.assignTutor(chosenTutor);
     chosenTutor.assignTimeslot(timeslot);
   }
 }
-
-
 
 for (var i=0; i<tutors.length; i++) {
   var curTutor = tutors[i];
@@ -102,14 +113,35 @@ for (var i=0; i<tutors.length; i++) {
   }
 }
 
-for (var i=0; i<timeslots.length; i++) {
-  assignRandomTutorFromCandidates(timeslots[i]);
+var numberOfTutorTimeslotSuggestions = 0;
+for (var k=0; k<tutors.length; k++) {
+  numberOfTutorTimeslotSuggestions += tutors[k].possibleTimeslots.length;
+}
+for (var l=0; l<tutors.length; l++) {
+  curTutor = tutors[l];
+  var percent = curTutor.possibleTimeslots.length / numberOfTutorTimeslotSuggestions;
+  curTutor.percentageOfTimeslotSuggestions = percent;
+  //curTutor.idealNumberOfTimeslots = Math.ceil(timeslots.length * percent);
+  curTutor.idealNumberOfTimeslots = Math.floor(timeslots.length / tutors.length);
 }
 
-for (var i=0; i<timeslots.length; i++) {
-  console.log(timeslots[i].toString());
+for (var m=0; m<timeslots.length; m++) {
+  var curTimeslot = timeslots[m];
+  if (curTimeslot.tutorCandidates.length === 1) {
+    var chosenTutor = curTimeslot.tutorCandidates[0];
+    curTimeslot.assignTutor(chosenTutor);
+    chosenTutor.assignTimeslot(curTimeslot);
+  }
 }
 
-for (var i=0; i<tutors.length; i++) {
-  console.log(tutors[i].toString());
+for (var n=timeslots.length-1; n>=0; n--) {
+  assignTutorFromCandidates(timeslots[n]);
+}
+
+for (var o=0; o<timeslots.length; o++) {
+  console.log(timeslots[o].toString());
+}
+
+for (var p=0; p<tutors.length; p++) {
+  console.log(tutors[p].toString());
 }

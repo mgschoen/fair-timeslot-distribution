@@ -7,12 +7,24 @@ function Tutor (name, possibleTimeslots) {
   this.possibleTimeslots = possibleTimeslots;
 
   this.assignedTimeslots = [];
+
+  this.percentageOfTimeslotSuggestions = null;
+  this.idealNumberOfTimeslots = null;
+  this.numberOfTimeslotsAssigned = 0;
 }
 
 Tutor.prototype = {
 
   assignTimeslot: function (slot) {
     this.assignedTimeslots[this.assignedTimeslots.length] = slot;
+    this.numberOfTimeslotsAssigned += 1;
+  },
+
+  lessThanIdealNumberOfTimeslotsAssigned: function () {
+    if (this.numberOfTimeslotsAssigned < this.idealNumberOfTimeslots) {
+      return true;
+    }
+    return false;
   },
 
   toString: function (short) {
@@ -23,7 +35,10 @@ Tutor.prototype = {
       if (this.assignedTimeslots.length === 0) {
         string += "[ name: \"" + this.name + "\" no-timeslots ]";
       } else {
-        string += "[ name: \"" + this.name + "\"\n";
+        string += "[ name: \"" + this.name + "\" percentageOfSuggestions: " +
+          Math.floor(this.percentageOfTimeslotSuggestions * 100) +
+          " idealNumberOfTimeslots: " + this.idealNumberOfTimeslots +
+          " actualNumberOfTimeslots: " + this.numberOfTimeslotsAssigned + "\n";
         for (var i=0; i<this.assignedTimeslots.length; i++) {
           string += "  " + this.assignedTimeslots[i].toString(true) + "\n";
         }
