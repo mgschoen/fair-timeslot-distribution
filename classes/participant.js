@@ -19,7 +19,6 @@ Participant.prototype = {
       throw "Cannot assign timeslot to " + this.toString(true) + ". " + slot.toString(true) + " has no tutor.";
     }
     this.timeslot = slot;
-    slot.assignParticipant(this);
   },
 
   toString: function (short) {

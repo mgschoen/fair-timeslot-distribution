@@ -39,7 +39,10 @@ function Timeslot (day, startHour, startMin, durationMins) {
   this.durationMins = durationMins;
   this.endMin = this.startMin + this.durationMins;
 
+  this.tutorCandidates = [];
   this.associatedTutor = null;
+
+  this.participantCandidates = [];
   this.associatedParticipant = null;
 
 }
@@ -47,6 +50,10 @@ function Timeslot (day, startHour, startMin, durationMins) {
 /** PROTOTYPE */
 
 Timeslot.prototype = {
+
+  addTutorCandidate: function (tutor) {
+    this.tutorCandidates[this.tutorCandidates.length] = tutor;
+  },
 
   assignTutor: function (tutor) {
     if (this.hasTutor()) {

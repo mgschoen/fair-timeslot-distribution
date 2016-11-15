@@ -7,14 +7,12 @@ function Tutor (name, possibleTimeslots) {
   this.possibleTimeslots = possibleTimeslots;
 
   this.assignedTimeslots = [];
-
 }
 
 Tutor.prototype = {
 
   assignTimeslot: function (slot) {
     this.assignedTimeslots[this.assignedTimeslots.length] = slot;
-    slot.assignTutor(this);
   },
 
   toString: function (short) {

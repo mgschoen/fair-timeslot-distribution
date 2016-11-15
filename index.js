@@ -19,10 +19,10 @@ var timeslots = [
   new Timeslot("Wednesday", 8, 15, 90),       // 12 Christel
   new Timeslot("Wednesday", 10, 15, 90),      // 13
   new Timeslot("Wednesday", 12, 15, 90),      // 14 Dieter
-  new Timeslot("Wednesday", 14, 15, 90),      // 15 Barbara, Christel, Edeltraud
+  new Timeslot("Wednesday", 14, 15, 90),      // 15 Christel, Edeltraud
   new Timeslot("Wednesday", 16, 15, 90),      // 16 Christel, Barbara, Dieter, Edeltraud
   new Timeslot("Wednesday", 18, 15, 90),      // 17 Alfred, Barbara, Dieter, Edeltraud
-  new Timeslot("Thursday", 8, 15, 90),        // 18 Barbara, Christel, Edeltraud, Franz
+  new Timeslot("Thursday", 8, 15, 90),        // 18 Christel, Edeltraud, Franz
   new Timeslot("Thursday", 10, 15, 90),       // 19 Alfred, Barbara, Christel, Dieter, Franz
   new Timeslot("Thursday", 12, 15, 90),       // 20 Barbara, Dieter, Edeltraud, Franz
   new Timeslot("Thursday", 14, 15, 90),       // 21 Barbara, Edeltraud, Franz
@@ -44,7 +44,7 @@ var timeslots = [
 
 var tutors = [
   new Tutor("Alfred", [1,2,5,8,9,11,17,19,22,23,26,27]),
-  new Tutor("Barbara", [15,16,17,18,19,20,21,22,23,28,29]),
+  new Tutor("Barbara", [16,17,19,20,21,22,23,28,29]),
   new Tutor("Christel", [1,3,5,6,9,10,12,15,16,18,19,22,24,25,30,31,32]),
   new Tutor("Dieter", [2,3,5,6,7,8,9,10,14,16,17,19,20,22,23,25,27,28,29,34,35]),
   new Tutor("Edeltraud", [7,8,11,15,16,17,18,20,21,22,23,24,25,31,32]),
@@ -80,10 +80,36 @@ var participants = [
   new Participant("Gruppe 26")
 ];
 
-tutors[1].assignTimeslot(timeslots[5]);
-tutors[1].assignTimeslot(timeslots[17]);
-participants[15].assignTimeslot(timeslots[17]);
+function assignRandomTutorFromCandidates (timeslot) {
+  if (timeslot.hasTutor()) {
+    throw "Cannot assign tutor to " + timeslot.toString(true) + ". " + timeslot.associatedTutor.toString(true) + " already assigned.";
+  }
+  if (timeslot.tutorCandidates.length !== 0) {
+    var randomIndex = Math.floor((Math.random() * timeslot.tutorCandidates.length));
+    var chosenTutor = timeslot.tutorCandidates[randomIndex];
+    timeslot.assignTutor(chosenTutor);
+    chosenTutor.assignTimeslot(timeslot);
+  }
+}
+
+
+
+for (var i=0; i<tutors.length; i++) {
+  var curTutor = tutors[i];
+  for (var j=0; j<curTutor.possibleTimeslots.length; j++) {
+    var curSlotIndex = curTutor.possibleTimeslots[j];
+    timeslots[curSlotIndex].addTutorCandidate(tutors[i]);
+  }
+}
+
+for (var i=0; i<timeslots.length; i++) {
+  assignRandomTutorFromCandidates(timeslots[i]);
+}
 
 for (var i=0; i<timeslots.length; i++) {
   console.log(timeslots[i].toString());
+}
+
+for (var i=0; i<tutors.length; i++) {
+  console.log(tutors[i].toString());
 }
