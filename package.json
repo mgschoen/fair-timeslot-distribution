@@ -4,6 +4,7 @@
   "description": "Algorithmic playground for fair distribution of timeslots among a group of participants",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -15,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/mgschoen/fair-timeslot-distribution/issues"
   },
-  "homepage": "https://github.com/mgschoen/fair-timeslot-distribution#readme"
+  "homepage": "https://github.com/mgschoen/fair-timeslot-distribution#readme",
+  "dependencies": {
+    "colors": "^1.1.2"
+  }
 }
