@@ -1,7 +1,7 @@
 
 /** GLOBALS */
 
-var validDays = [ "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" ];
+var validDays = [ "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" ];
 
 /** HELPERS */
 
@@ -14,7 +14,11 @@ var getMinuteComponent = function (mins) {
 };
 
 var getTimeString = function (mins) {
-  return getHourComponent(mins) + ":" + getMinuteComponent(mins);
+  var hour = getHourComponent(mins);
+  var min = getMinuteComponent(mins);
+  var hourString = (hour < 10) ? "0"+hour : ""+hour;
+  var minString = (min < 10) ? "0"+min : ""+min;
+  return hourString + ":" + minString;
 };
 
 /** CLASS DEFINITION */
@@ -42,7 +46,13 @@ function Timeslot (day, startHour, startMin, durationMins) {
   this.tutorCandidates = [];
   this.associatedTutor = null;
 
-  this.participantCandidates = [];
+  this.participantCandidatesPrioritized = {
+    "1": [],
+    "2": [],
+    "3": [],
+    "4": [],
+    "5": []
+  };
   this.associatedParticipant = null;
 
 }
@@ -60,6 +70,10 @@ Timeslot.prototype = {
       throw "Cannot assign tutor to " + this.toString(true) + ". " + this.associatedTutor.toString(true) + " already assigned.";
     }
     this.associatedTutor = tutor;
+  },
+
+  addParticipantCandidate: function (participant, prio) {
+    this.participantCandidatesPrioritized[prio].push(participant);
   },
 
   assignParticipant: function (participant) {

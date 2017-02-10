@@ -38,6 +38,7 @@ Tutor.prototype = {
       } else {
         string +=
           "probabilityOfGettingChosen: " + this.probabilityOfGettingChosen +
+          " compensationFactor: " + this.compensationFactor +
           " idealNumberOfTimeslots: " + this.idealNumberOfTimeslots +
           " actualNumberOfTimeslots: " + this.numberOfTimeslotsAssigned + "\n";
         for (var i=0; i<this.assignedTimeslots.length; i++) {

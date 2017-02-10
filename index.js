@@ -3,43 +3,47 @@ var Timeslot = require('./classes/timeslot.js');
 var Tutor = require('./classes/tutor.js');
 var Participant = require('./classes/participant.js');
 
+/* * * * * * * * * * * * * * * * * * * * * * * * * *
+ * D U M M Y   D A T A                             *
+ * * * * * * * * * * * * * * * * * * * * * * * * * */
+
 var timeslots = [
-  new Timeslot("Monday", 8, 15, 90),          //  0
-  new Timeslot("Monday", 10, 15, 90),         //  1 Alfred, Christel
-  new Timeslot("Monday", 12, 15, 90),         //  2 Alfred, Dieter
-  new Timeslot("Monday", 14, 15, 90),         //  3 Christel, Dieter
-  new Timeslot("Monday", 16, 15, 90),         //  4
-  new Timeslot("Monday", 18, 15, 90),         //  5 Alfred, Christel, Dieter
-  new Timeslot("Tuesday", 8, 15, 90),         //  6 Christel, Dieter
-  new Timeslot("Tuesday", 10, 15, 90),        //  7 Dieter, Edeltraud
-  new Timeslot("Tuesday", 12, 15, 90),        //  8 Alfred, Dieter, Edeltraud
-  new Timeslot("Tuesday", 14, 15, 90),        //  9 Alfred, Christel, Dieter
-  new Timeslot("Tuesday", 16, 15, 90),        // 10 Christel, Dieter
-  new Timeslot("Tuesday", 18, 15, 90),        // 11 Alfred, Edeltraud
-  new Timeslot("Wednesday", 8, 15, 90),       // 12 Christel
-  new Timeslot("Wednesday", 10, 15, 90),      // 13
-  new Timeslot("Wednesday", 12, 15, 90),      // 14 Dieter
-  new Timeslot("Wednesday", 14, 15, 90),      // 15 Christel, Edeltraud
-  new Timeslot("Wednesday", 16, 15, 90),      // 16 Christel, Barbara, Dieter, Edeltraud
-  new Timeslot("Wednesday", 18, 15, 90),      // 17 Alfred, Barbara, Dieter, Edeltraud
-  new Timeslot("Thursday", 8, 15, 90),        // 18 Christel, Edeltraud, Franz
-  new Timeslot("Thursday", 10, 15, 90),       // 19 Alfred, Barbara, Christel, Dieter, Franz
-  new Timeslot("Thursday", 12, 15, 90),       // 20 Barbara, Dieter, Edeltraud, Franz
-  new Timeslot("Thursday", 14, 15, 90),       // 21 Barbara, Edeltraud, Franz
-  new Timeslot("Thursday", 16, 15, 90),       // 22 Alfred, Barbara, Christel, Dieter, Edeltraud, Franz
-  new Timeslot("Thursday", 18, 15, 90),       // 23 Alfred, Barbara, Dieter, Edeltraud, Franz
-  new Timeslot("Friday", 8, 15, 90),          // 24 Christel, Edeltraud, Franz
-  new Timeslot("Friday", 10, 15, 90),         // 25 Christel, Dieter, Edeltraud, Franz
-  new Timeslot("Friday", 12, 15, 90),         // 26 Alfred, Franz
-  new Timeslot("Friday", 14, 15, 90),         // 27 Alfred, Dieter, Franz
-  new Timeslot("Friday", 16, 15, 90),         // 28 Barbara, Dieter, Franz
-  new Timeslot("Friday", 18, 15, 90),         // 29 Barbara, Dieter, Franz
-  new Timeslot("Saturday", 8, 15, 90),        // 30 Christel
-  new Timeslot("Saturday", 10, 15, 90),       // 31 Christel, Edeltraud
-  new Timeslot("Saturday", 12, 15, 90),       // 32 Christel, Edeltraud
-  new Timeslot("Saturday", 14, 15, 90),       // 33
-  new Timeslot("Saturday", 16, 15, 90),       // 34 Dieter
-  new Timeslot("Saturday", 18, 15, 90)        // 35 Dieter
+  new Timeslot("Mon", 8, 15, 90),       //  0
+  new Timeslot("Mon", 10, 15, 90),      //  1 Alfred, Christel
+  new Timeslot("Mon", 12, 15, 90),      //  2 Alfred, Dieter
+  new Timeslot("Mon", 14, 15, 90),      //  3 Christel, Dieter
+  new Timeslot("Mon", 16, 15, 90),      //  4
+  new Timeslot("Mon", 18, 15, 90),      //  5 Alfred, Christel, Dieter
+  new Timeslot("Tue", 8, 15, 90),       //  6 Christel, Dieter
+  new Timeslot("Tue", 10, 15, 90),      //  7 Dieter, Edeltraud
+  new Timeslot("Tue", 12, 15, 90),      //  8 Alfred, Dieter, Edeltraud
+  new Timeslot("Tue", 14, 15, 90),      //  9 Alfred, Christel, Dieter
+  new Timeslot("Tue", 16, 15, 90),      // 10 Christel, Dieter
+  new Timeslot("Tue", 18, 15, 90),      // 11 Alfred, Edeltraud
+  new Timeslot("Wed", 8, 15, 90),       // 12 Christel
+  new Timeslot("Wed", 10, 15, 90),      // 13
+  new Timeslot("Wed", 12, 15, 90),      // 14 Dieter
+  new Timeslot("Wed", 14, 15, 90),      // 15 Christel, Edeltraud
+  new Timeslot("Wed", 16, 15, 90),      // 16 Christel, Barbara, Dieter, Edeltraud
+  new Timeslot("Wed", 18, 15, 90),      // 17 Alfred, Barbara, Dieter, Edeltraud
+  new Timeslot("Thu", 8, 15, 90),       // 18 Christel, Edeltraud, Franz
+  new Timeslot("Thu", 10, 15, 90),      // 19 Alfred, Barbara, Christel, Dieter, Franz
+  new Timeslot("Thu", 12, 15, 90),      // 20 Barbara, Dieter, Edeltraud, Franz
+  new Timeslot("Thu", 14, 15, 90),      // 21 Barbara, Edeltraud, Franz
+  new Timeslot("Thu", 16, 15, 90),      // 22 Alfred, Barbara, Christel, Dieter, Edeltraud, Franz
+  new Timeslot("Thu", 18, 15, 90),      // 23 Alfred, Barbara, Dieter, Edeltraud, Franz
+  new Timeslot("Fri", 8, 15, 90),       // 24 Christel, Edeltraud, Franz
+  new Timeslot("Fri", 10, 15, 90),      // 25 Christel, Dieter, Edeltraud, Franz
+  new Timeslot("Fri", 12, 15, 90),      // 26 Alfred, Franz
+  new Timeslot("Fri", 14, 15, 90),      // 27 Alfred, Dieter, Franz
+  new Timeslot("Fri", 16, 15, 90),      // 28 Barbara, Dieter, Franz
+  new Timeslot("Fri", 18, 15, 90),      // 29 Barbara, Dieter, Franz
+  new Timeslot("Sat", 8, 15, 90),       // 30 Christel
+  new Timeslot("Sat", 10, 15, 90),      // 31 Christel, Edeltraud
+  new Timeslot("Sat", 12, 15, 90),      // 32 Christel, Edeltraud
+  new Timeslot("Sat", 14, 15, 90),      // 33
+  new Timeslot("Sat", 16, 15, 90),      // 34 Dieter
+  new Timeslot("Sat", 18, 15, 90)       // 35 Dieter
 ];
 
 var tutors = [
@@ -52,33 +56,37 @@ var tutors = [
 ];
 
 var participants = [
-  new Participant("Gruppe 01"),
-  new Participant("Gruppe 02"),
-  new Participant("Gruppe 03"),
-  new Participant("Gruppe 04"),
-  new Participant("Gruppe 05"),
-  new Participant("Gruppe 06"),
-  new Participant("Gruppe 07"),
-  new Participant("Gruppe 08"),
-  new Participant("Gruppe 09"),
-  new Participant("Gruppe 10"),
-  new Participant("Gruppe 11"),
-  new Participant("Gruppe 12"),
-  new Participant("Gruppe 13"),
-  new Participant("Gruppe 14"),
-  new Participant("Gruppe 15"),
-  new Participant("Gruppe 16"),
-  new Participant("Gruppe 17"),
-  new Participant("Gruppe 18"),
-  new Participant("Gruppe 19"),
-  new Participant("Gruppe 20"),
-  new Participant("Gruppe 21"),
-  new Participant("Gruppe 22"),
-  new Participant("Gruppe 23"),
-  new Participant("Gruppe 24"),
-  new Participant("Gruppe 25"),
-  new Participant("Gruppe 26")
+  new Participant("Gruppe 01", [timeslots[14],timeslots[3],timeslots[4],timeslots[32],timeslots[28]]),
+  new Participant("Gruppe 02", [timeslots[5],timeslots[7],timeslots[21],timeslots[20],timeslots[27]]),
+  new Participant("Gruppe 03", [timeslots[15],timeslots[32],timeslots[35],timeslots[21],timeslots[1]]),
+  new Participant("Gruppe 04", [timeslots[4],timeslots[2],timeslots[14],timeslots[15],timeslots[25]]),
+  new Participant("Gruppe 05", [timeslots[13],timeslots[27],timeslots[28],timeslots[19],timeslots[8]]),
+  new Participant("Gruppe 06", [timeslots[25],timeslots[20],timeslots[19],timeslots[6],timeslots[0]]),
+  new Participant("Gruppe 07", [timeslots[16],timeslots[14],timeslots[15],timeslots[21],timeslots[22]]),
+  new Participant("Gruppe 08", [timeslots[9],timeslots[3],timeslots[31],timeslots[32],timeslots[33]]),
+  new Participant("Gruppe 09", [timeslots[14],timeslots[29],timeslots[20],timeslots[21],timeslots[8]]),
+  new Participant("Gruppe 10", [timeslots[22],timeslots[13],timeslots[8],timeslots[9],timeslots[3]]),
+  new Participant("Gruppe 11", [timeslots[16],timeslots[2],timeslots[18],timeslots[4],timeslots[9]]),
+  new Participant("Gruppe 12", [timeslots[15],timeslots[33],timeslots[34],timeslots[25],timeslots[26]]),
+  new Participant("Gruppe 13", [timeslots[15],timeslots[20],timeslots[28],timeslots[10],timeslots[7]]),
+  new Participant("Gruppe 14", [timeslots[23],timeslots[22],timeslots[13],timeslots[3],timeslots[4]]),
+  new Participant("Gruppe 15", [timeslots[14],timeslots[15],timeslots[29],timeslots[35],timeslots[9]]),
+  new Participant("Gruppe 16", [timeslots[19],timeslots[25],timeslots[21],timeslots[14],timeslots[15]]),
+  new Participant("Gruppe 17", [timeslots[8],timeslots[15],timeslots[13],timeslots[22],timeslots[28]]),
+  new Participant("Gruppe 18", [timeslots[15],timeslots[9],timeslots[8],timeslots[3],timeslots[1]]),
+  new Participant("Gruppe 19", [timeslots[21],timeslots[19],timeslots[13],timeslots[26],timeslots[32]]),
+  new Participant("Gruppe 20", [timeslots[16],timeslots[22],timeslots[17],timeslots[27],timeslots[28]]),
+  new Participant("Gruppe 21", [timeslots[14],timeslots[12],timeslots[13],timeslots[10],timeslots[11]]),
+  new Participant("Gruppe 22", [timeslots[9],timeslots[15],timeslots[18],timeslots[23],timeslots[26]]),
+  new Participant("Gruppe 23", [timeslots[17],timeslots[23],timeslots[5],timeslots[29],timeslots[35]]),
+  new Participant("Gruppe 24", [timeslots[21],timeslots[22],timeslots[15],timeslots[14],timeslots[7]]),
+  new Participant("Gruppe 25", [timeslots[14],timeslots[27],timeslots[26],timeslots[28],timeslots[0]]),
+  new Participant("Gruppe 26", [timeslots[15],timeslots[8],timeslots[10],timeslots[33],timeslots[18]])
 ];
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * *
+ * H E L P E R S                                   *
+ * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 function shuffle(a) {
   var j, x, i;
@@ -89,6 +97,10 @@ function shuffle(a) {
     a[j] = x;
   }
 }
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * *
+ * T U T O R S                                     *
+ * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 function assignTutorFromCandidates (timeslot) {
   if (!timeslot.hasTutor() && timeslot.tutorCandidates.length > 0) {
@@ -205,11 +217,91 @@ for (i=0; i<timeslots.length; i++) {
   assignTutorFromCandidates(timeslots[i]);
 }
 
-// Debugging
-for (i=0; i<timeslots.length; i++) {
-  console.log(timeslots[i].toString());
+/* * * * * * * * * * * * * * * * * * * * * * * * * *
+ * S T U D E N T S                                 *
+ * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+// TODO:
+// - visualize priorities in participant.toString()
+// - assign remaining participants without timeslot
+
+function assignRandomParticipantToTimeslot (timeslot, listOfParticipants) {
+  var randomIndex = Math.floor((Math.random() * listOfParticipants.length));
+  var chosenParticipant = listOfParticipants[randomIndex];
+  timeslot.assignParticipant(chosenParticipant);
+  chosenParticipant.assignTimeslot(timeslot);
+  return chosenParticipant;
 }
 
-for (i=0; i<tutors.length; i++) {
-  console.log(tutors[i].toString());
+var remainingParticipants = participants.slice();
+
+// Prio 1
+timeslots.forEach(function(timeslot){
+  if (timeslot.hasTutor()) {
+    var prioOneCandidates = timeslot.participantCandidatesPrioritized['1'];
+    if (prioOneCandidates.length > 0) {
+      var chosenParticipant = assignRandomParticipantToTimeslot(timeslot, prioOneCandidates);
+      var indexOfChosenParticipant = remainingParticipants.indexOf(chosenParticipant);
+      remainingParticipants.splice(indexOfChosenParticipant, 1);
+    }
+  }
+});
+
+// Prio 2-5
+var prio = 2;
+
+while (prio < 6) {
+
+  timeslots.forEach(function(timeslot){
+
+    if (timeslot.hasTutor() && !timeslot.hasParticipant()) {
+
+      // Filter candidates of current prio for participants without a group
+      var candidatesForCurrentPrio = [];
+      timeslot.participantCandidatesPrioritized[prio.toString()].forEach(function(item){
+        if(remainingParticipants.indexOf(item) >= 0) {
+          candidatesForCurrentPrio.push(item);
+        }
+      });
+
+      // Assign candidate if possible
+      if (candidatesForCurrentPrio.length > 0) {
+        var chosenParticipant = assignRandomParticipantToTimeslot(timeslot, candidatesForCurrentPrio);
+        var indexOfChosenParticipant = remainingParticipants.indexOf(chosenParticipant);
+        remainingParticipants.splice(indexOfChosenParticipant, 1);
+      }
+    }
+  });
+
+  prio++;
 }
+
+var remainingTimeslots = [];
+timeslots.forEach(function(timeslot){
+  if (timeslot.hasTutor() && !timeslot.hasParticipant()) {
+    remainingTimeslots.push(timeslot);
+  }
+});
+
+remainingParticipants.forEach(function(participant, index){
+  if (remainingTimeslots[index]) {
+    participant.assignTimeslot(remainingTimeslots[index]);
+    remainingTimeslots[index].assignParticipant(participant);
+  }
+});
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * *
+ * D E B U G G I N G                               *
+ * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+timeslots.forEach(function(timeslot){
+  console.log(timeslot.toString());
+});
+
+tutors.forEach(function(tutor){
+  console.log(tutor.toString());
+});
+
+participants.forEach(function(participant){
+  console.log(participant.toString());
+});
