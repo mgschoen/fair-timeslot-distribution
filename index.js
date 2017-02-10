@@ -221,10 +221,6 @@ for (i=0; i<timeslots.length; i++) {
  * S T U D E N T S                                 *
  * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-// TODO:
-// - visualize priorities in participant.toString()
-// - assign remaining participants without timeslot
-
 function assignRandomParticipantToTimeslot (timeslot, listOfParticipants) {
   var randomIndex = Math.floor((Math.random() * listOfParticipants.length));
   var chosenParticipant = listOfParticipants[randomIndex];
