@@ -23,7 +23,7 @@ var getTimeString = function (mins) {
 
 /** CLASS DEFINITION */
 
-function Timeslot (day, startHour, startMin, durationMins) {
+function Timeslot (day, startHour, startMin, durationMins, numberOfPrioritiesPerGroup) {
 
   if (validDays.indexOf(day) < 0) {
     throw "Failed to init timeslot. " + day + " is not a valid day string";
@@ -46,13 +46,12 @@ function Timeslot (day, startHour, startMin, durationMins) {
   this.tutorCandidates = [];
   this.associatedTutor = null;
 
-  this.participantCandidatesPrioritized = {
-    "1": [],
-    "2": [],
-    "3": [],
-    "4": [],
-    "5": []
-  };
+  var prio = 1;
+  this.participantCandidatesPrioritized = {};
+  while (prio <= numberOfPrioritiesPerGroup) {
+    this.participantCandidatesPrioritized[prio.toString()] = [];
+    prio++;
+  }
   this.associatedParticipant = null;
 
 }

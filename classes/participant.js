@@ -7,7 +7,7 @@ function Participant (name, timeslotPriorityList) {
 
   this.timeslotPriorityList = timeslotPriorityList;
   var prio = 1;
-  while (prio < 6) {
+  while (prio < (timeslotPriorityList.length+1)) {
     this.timeslotPriorityList[prio-1].addParticipantCandidate(this, prio.toString());
     prio++;
   }
@@ -43,7 +43,12 @@ Participant.prototype = {
           case 2: prioEvaluationString = "This was Prio 3".yellow; break;
           case 3: prioEvaluationString = "This was Prio 4".magenta; break;
           case 4: prioEvaluationString = "This was Prio 5".magenta; break;
-          default: prioEvaluationString = "This was not on the priority list".red;
+          default:
+              if (priorityOfAssignedTimeslot > 0) {
+                prioEvaluationString = "This was Prio ".red + priorityOfAssignedTimeslot.toString().red;
+              } else {
+                prioEvaluationString = "This was not on the priority list".red;
+              }
         }
         string += "[ name: \"" + this.name + "\" " + this.timeslot.toString(true) +
             " - " + prioEvaluationString + " ]";

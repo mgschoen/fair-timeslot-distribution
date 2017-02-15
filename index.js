@@ -1,13 +1,25 @@
 require('colors');
-var Timeslot = require('./classes/timeslot.js');
-var Tutor = require('./classes/tutor.js');
-var Participant = require('./classes/participant.js');
+var Scenario = require('./classes/scenario.js');
+
+const NUMBER_OF_TIMESLOTS = 72;
+const NUMBER_OF_TUTORS = 8;
+const NUMBER_OF_GROUPS = 50;
+const NUMBER_OF_PRIORITIES_PER_GROUP = 5;
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * *
  * D U M M Y   D A T A                             *
  * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-var timeslots = [
+var scenario = new Scenario(
+    NUMBER_OF_TIMESLOTS,
+    NUMBER_OF_TUTORS,
+    NUMBER_OF_GROUPS,
+    NUMBER_OF_PRIORITIES_PER_GROUP);
+var timeslots = scenario.timeslots;
+var tutors = scenario.tutors;
+var participants = scenario.groups;
+
+/*var timeslots = [
   new Timeslot("Mon", 8, 15, 90),       //  0
   new Timeslot("Mon", 10, 15, 90),      //  1 Alfred, Christel
   new Timeslot("Mon", 12, 15, 90),      //  2 Alfred, Dieter
@@ -82,7 +94,7 @@ var participants = [
   new Participant("Gruppe 24", [timeslots[21],timeslots[22],timeslots[15],timeslots[14],timeslots[7]]),
   new Participant("Gruppe 25", [timeslots[14],timeslots[27],timeslots[26],timeslots[28],timeslots[0]]),
   new Participant("Gruppe 26", [timeslots[15],timeslots[8],timeslots[10],timeslots[33],timeslots[18]])
-];
+];*/
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * *
  * H E L P E R S                                   *
@@ -139,7 +151,11 @@ function assignTutorFromCandidates (timeslot) {
       chosenTutor = compensatedSetOfCandidates[randomIndex];
     }
     timeslot.assignTutor(chosenTutor);
-    chosenTutor.assignTimeslot(timeslot);
+    try {
+      chosenTutor.assignTimeslot(timeslot);
+    } catch (error) {
+      console.log("wtf");
+    }
   }
 }
 
@@ -246,7 +262,7 @@ timeslots.forEach(function(timeslot){
 // Prio 2-5
 var prio = 2;
 
-while (prio < 6) {
+while (prio < (NUMBER_OF_PRIORITIES_PER_GROUP + 1)) {
 
   timeslots.forEach(function(timeslot){
 
